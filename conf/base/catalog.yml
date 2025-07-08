@@ -1,4 +1,70 @@
-# Here you can define all your datasets by using simple YAML syntax.
-#
-# Documentation for this file format can be found in "The Data Catalog"
-# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+# Benchmark Pipeline Data Catalog
+# Based on bullet-from-a-gun repository catalog structure
+
+# Template definitions for reusable dataset configurations
+_template_training_results: &template_training_results
+  type: json.JSONDataset
+  filepath: data/06_models/training/
+  save_args:
+    indent: 4
+  metadata:
+    kedro-viz:
+      layer: models
+
+_template_evaluation_results: &template_evaluation_results
+  type: json.JSONDataset
+  filepath: data/06_models/evaluation/
+  save_args:
+    indent: 4
+  metadata:
+    kedro-viz:
+      layer: models
+
+_template_evaluation_plots: &template_evaluation_plots
+  type: json.JSONDataset
+  filepath: data/08_reporting/plots/
+  save_args:
+    indent: 4
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+_template_comparison_results: &template_comparison_results
+  type: json.JSONDataset
+  filepath: data/08_reporting/comparison/
+  save_args:
+    indent: 4
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+# YOLO v12 Holes Experiment Datasets
+yolo_v12_holes_training_results:
+  <<: *template_training_results
+  filepath: data/06_models/training/yolo_v12_holes_training_results.json
+
+yolo_v12_holes_evaluation_results:
+  <<: *template_evaluation_results
+  filepath: data/06_models/evaluation/yolo_v12_holes_evaluation_results.json
+
+yolo_v12_holes_evaluation_plots:
+  <<: *template_evaluation_plots
+  filepath: data/08_reporting/plots/yolo_v12_holes_evaluation_plots.json
+
+# YOLO v12 Center Experiment Datasets
+yolo_v12_center_training_results:
+  <<: *template_training_results
+  filepath: data/06_models/training/yolo_v12_center_training_results.json
+
+yolo_v12_center_evaluation_results:
+  <<: *template_evaluation_results
+  filepath: data/06_models/evaluation/yolo_v12_center_evaluation_results.json
+
+yolo_v12_center_evaluation_plots:
+  <<: *template_evaluation_plots
+  filepath: data/08_reporting/plots/yolo_v12_center_evaluation_plots.json
+
+# Comparison Analysis Dataset
+yolo_v12_comparison_results:
+  <<: *template_comparison_results
+  filepath: data/08_reporting/comparison/yolo_v12_comparison_results.json

@@ -1,5 +1,63 @@
-# This is a boilerplate parameters config generated for pipeline 'benchmark'
-# using Kedro 0.19.14.
-#
-# Documentation for this file format can be found in "Parameters"
-# Link: https://docs.kedro.org/en/0.19.14/configuration/parameters.html
+# Benchmark pipeline parameters for YOLO v12 experiments
+# Based on bullet-from-a-gun repository configurations
+
+yolo_v12_exp1_holes:
+    dataprep_params:
+        experiment_id: "yolo_v12_exp1_holes" 
+        yolo_data:
+            path:
+                - data
+                - 05_model_input
+                - bullets
+                - yolo
+                - v1
+            datasets:
+                - train
+                - valid
+                - test
+    fine_tuning_params:
+        path:
+            - data
+            - 06_models
+            - output
+        model_name: yolo12s.pt
+        experiment_name: "yolo_v12_exp1_holes" 
+        model_config:
+            epochs: 256
+            batch: 8
+            img_size: 640
+            optimizer: "auto"
+            lr0: 0.0001
+            workers: 8
+            rect: true
+            iou: 0.5
+
+yolo_v12_exp1_center:
+    dataprep_params:
+        experiment_id: "yolo_v12_exp1_center" 
+        yolo_data:
+            path:
+                - data
+                - 05_model_input
+                - center
+                - yolo
+            datasets:
+                - train
+                - valid
+                - test
+    fine_tuning_params:
+        path:
+            - data
+            - 06_models
+            - output
+        model_name: yolo12s.pt
+        experiment_name: "yolo_v12_exp1_center" 
+        model_config:
+            epochs: 256
+            batch: 8
+            img_size: 640
+            optimizer: "auto"
+            lr0: 0.0001
+            workers: 8
+            rect: true
+            iou: 0.5

@@ -66,3 +66,6 @@ attr = "bullet_from_a_gun_scoring.__version__"
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.kedro_telemetry]
+project_id = "1cc20848182742469ae9be1d78b71fc7"

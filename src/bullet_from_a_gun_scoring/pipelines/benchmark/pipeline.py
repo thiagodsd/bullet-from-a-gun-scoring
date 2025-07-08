@@ -1,76 +1,65 @@
 """
-Benchmark pipeline for YOLO v12 experiments
+Benchmark pipeline using modular pipelines approach
 Based on bullet-from-a-gun repository implementation
 """
 
-from kedro.pipeline import node, Pipeline, pipeline
+from kedro.pipeline import Pipeline, node, pipeline
+
 from .nodes import (
-    fine_tune_yolo_v12_holes,
-    fine_tune_yolo_v12_center,
-    evaluate_yolo_v12_holes,
-    evaluate_yolo_v12_center,
-    compare_experiments
+    fine_tune_yolo,
+    evaluate_yolo,
 )
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     """
-    Create the benchmark pipeline with YOLO v12 experiments for holes and center detection.
+    Create the benchmark pipeline using modular pipelines.
     
-    This pipeline includes:
-    - Fine-tuning YOLO v12 models for bullet hole detection
-    - Fine-tuning YOLO v12 models for center detection
-    - Evaluation of both models
-    - Comparison of results between experiments
+    This creates template pipelines that can be reused across different experiments
+    with proper namespacing for parameter isolation.
+    
+    Returns:
+        Pipeline: The complete benchmark pipeline with all experiment variants
     """
-    return pipeline([
-        # YOLO v12 Holes Experiment
+    
+    # Template YOLO pipeline
+    template_yolo = pipeline([
         node(
-            func=fine_tune_yolo_v12_holes,
-            inputs="params:yolo_v12_exp1_holes",
-            outputs="yolo_v12_holes_training_results",
-            name="fine_tune_yolo_v12_holes",
-            tags=["yolo", "training", "holes"]
-        ),
-        node(
-            func=evaluate_yolo_v12_holes,
-            inputs="params:yolo_v12_exp1_holes",
-            outputs=[
-                "yolo_v12_holes_evaluation_results",
-                "yolo_v12_holes_evaluation_plots"
-            ],
-            name="evaluate_yolo_v12_holes",
-            tags=["yolo", "evaluation", "holes"]
-        ),
-        
-        # YOLO v12 Center Experiment
-        node(
-            func=fine_tune_yolo_v12_center,
-            inputs="params:yolo_v12_exp1_center",
-            outputs="yolo_v12_center_training_results",
-            name="fine_tune_yolo_v12_center",
-            tags=["yolo", "training", "center"]
-        ),
-        node(
-            func=evaluate_yolo_v12_center,
-            inputs="params:yolo_v12_exp1_center",
-            outputs=[
-                "yolo_v12_center_evaluation_results",
-                "yolo_v12_center_evaluation_plots"
-            ],
-            name="evaluate_yolo_v12_center",
-            tags=["yolo", "evaluation", "center"]
-        ),
-        
-        # Comparison Analysis
-        node(
-            func=compare_experiments,
+            func=fine_tune_yolo,
             inputs=[
-                "yolo_v12_holes_evaluation_results",
-                "yolo_v12_center_evaluation_results"
+                "params:dataprep_params",
+                "params:fine_tuning_params",
             ],
-            outputs="yolo_v12_comparison_results",
-            name="compare_yolo_v12_experiments",
-            tags=["comparison", "analysis"]
-        )
+            outputs="fine_tuning_results",
+            name="fine_tune_yolo",
+        ),
+        node(
+            func=evaluate_yolo,
+            inputs=[
+                "params:dataprep_params",
+                "params:fine_tuning_params",
+            ],
+            outputs=[
+                "evaluation_results",
+                "evaluation_plots",
+            ],
+            name="evaluate_yolo",
+        ),
     ])
+    
+    # Create specific experiment pipelines using namespaces
+    yolo_v12_exp1_holes = pipeline(
+        pipe=template_yolo,
+        namespace="yolo.yolo_v12_exp1_holes",
+    )
+    # kedro run --pipeline benchmark -n yolo.yolo_v12_exp1_holes.fine_tune_yolo
+    # kedro run --pipeline benchmark -n yolo.yolo_v12_exp1_holes.evaluate_yolo
+    
+    yolo_v12_exp1_center = pipeline(
+        pipe=template_yolo,
+        namespace="yolo.yolo_v12_exp1_center",
+    )
+    # kedro run --pipeline benchmark -n yolo.yolo_v12_exp1_center.fine_tune_yolo
+    # kedro run --pipeline benchmark -n yolo.yolo_v12_exp1_center.evaluate_yolo
+    
+    return yolo_v12_exp1_holes + yolo_v12_exp1_center

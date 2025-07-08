@@ -1,63 +1,63 @@
-# Benchmark pipeline parameters for YOLO v12 experiments
+# Benchmark pipeline parameters using namespaced structure
 # Based on bullet-from-a-gun repository configurations
 
-yolo_v12_exp1_holes:
-    dataprep_params:
-        experiment_id: "yolo_v12_exp1_holes" 
-        yolo_data:
+yolo:
+    yolo_v12_exp1_holes:
+        dataprep_params:
+            experiment_id: "yolo_v12_exp1_holes" 
+            yolo_data:
+                path:
+                    - data
+                    - 05_model_input
+                    - bullets
+                    - yolo
+                    - v1
+                datasets:
+                    - train
+                    - valid
+                    - test
+        fine_tuning_params:
             path:
                 - data
-                - 05_model_input
-                - bullets
-                - yolo
-                - v1
-            datasets:
-                - train
-                - valid
-                - test
-    fine_tuning_params:
-        path:
-            - data
-            - 06_models
-            - output
-        model_name: yolo12s.pt
-        experiment_name: "yolo_v12_exp1_holes" 
-        model_config:
-            epochs: 256
-            batch: 8
-            img_size: 640
-            optimizer: "auto"
-            lr0: 0.0001
-            workers: 8
-            rect: true
-            iou: 0.5
-
-yolo_v12_exp1_center:
-    dataprep_params:
-        experiment_id: "yolo_v12_exp1_center" 
-        yolo_data:
+                - 06_models
+                - output
+            model_name: yolo12s.pt
+            experiment_name: "yolo_v12_exp1_holes" 
+            model_config:
+                epochs: 256
+                batch: 8
+                img_size: 640
+                optimizer: "auto"
+                lr0: 0.0001
+                workers: 8
+                rect: true
+                iou: 0.5
+    yolo_v12_exp1_center:
+        dataprep_params:
+            experiment_id: "yolo_v12_exp1_center" 
+            yolo_data:
+                path:
+                    - data
+                    - 05_model_input
+                    - center
+                    - yolo
+                datasets:
+                    - train
+                    - valid
+                    - test
+        fine_tuning_params:
             path:
                 - data
-                - 05_model_input
-                - center
-                - yolo
-            datasets:
-                - train
-                - valid
-                - test
-    fine_tuning_params:
-        path:
-            - data
-            - 06_models
-            - output
-        model_name: yolo12s.pt
-        experiment_name: "yolo_v12_exp1_center" 
-        model_config:
-            epochs: 256
-            batch: 8
-            img_size: 640
-            optimizer: "auto"
-            lr0: 0.0001
-            workers: 8
-            rect: true
-            iou: 0.5
+                - 06_models
+                - output
+            model_name: yolo12s.pt
+            experiment_name: "yolo_v12_exp1_center" 
+            model_config:
+                epochs: 256
+                batch: 8
+                img_size: 640
+                optimizer: "auto"
+                lr0: 0.0001
+                workers: 8
+                rect: true
+                iou: 0.5

@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bullet-from-a-gun-scoring"
+version = "0.1.0"
+description = "Benchmarking convolutional techniques for bullet hole detection and scoring on concentric circle and ellipse targets"
+authors = [
+    {name = "thiagodsd"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+keywords = ["computer-vision", "object-detection", "yolo", "detr", "faster-rcnn", "bullet-hole-detection"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+
+dependencies = [
+    "kedro>=0.19.14",
+    "ipython>=8.10",
+    "jupyterlab>=3.0",
+    "notebook",
+]
+
+[project.scripts]
+bullet-from-a-gun-scoring = "bullet_from_a_gun_scoring.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest-cov~=3.0",
+    "pytest-mock>=1.7.1,<2.0",
+    "pytest~=7.2",
+    "ruff~=0.1.8",
+]
+
+[tool.kedro]
+package_name = "bullet_from_a_gun_scoring"
+project_name = "bullet-from-a-gun-scoring"
+kedro_init_version = "0.19.14"
+tools = "['Linting', 'Data Structure']"
+example_pipeline = "False"
+source_dir = "src"
+
+[tool.ruff]
+line-length = 88
+show-fixes = true
+select = ["F", "W", "E", "I", "UP", "PL", "T201"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[project.entry-points."kedro.hooks"]
+
+[tool.setuptools.dynamic.version]
+attr = "bullet_from_a_gun_scoring.__version__"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
